@@ -7,8 +7,18 @@
 - Failure detection
 
 ## Run
-
 ```bash
 pip install -r requirements.txt
 export OPENAI_API_KEY=your_key
 uvicorn app.main:app --reload
+
+
+## Endpoint
+http://localhost:8000/ask?q=What
+ is the capital of France?
+
+## Goal
+Make LLM outputs:
+- transparent
+- explainable
+- measurable
