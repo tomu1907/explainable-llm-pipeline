@@ -1,1 +1,14 @@
-# explainable-llm-pipeline
+# Explainable LLM Pipeline
+
+## Features
+- Retrieval-Augmented Generation (RAG)
+- Sentence-level attribution
+- Confidence scoring
+- Failure detection
+
+## Run
+
+```bash
+pip install -r requirements.txt
+export OPENAI_API_KEY=your_key
+uvicorn app.main:app --reload
