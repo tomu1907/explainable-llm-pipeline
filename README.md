@@ -8,7 +8,7 @@
 
 ## Run
 ```bash
-pip install -r requirements.txt
+py -m pip install -r requirements.txt
 export OPENAI_API_KEY=your_key
 uvicorn app.main:app --reload
 
