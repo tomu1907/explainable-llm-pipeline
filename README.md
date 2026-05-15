@@ -24,4 +24,4 @@ Make LLM outputs:
 - measurable
 
 ## Architecture Overview
-![Screenshot](doc/explainablellm-pipeline_Architecture.png)
+![Screenshot]([https://raw.githubusercontent.com/USER/REPO/main/doc/explainablellm-pipeline_Architecture.png](https://github.com/tomu1907/explainable-llm-pipeline/blob/main/doc/explainablellm-pipeline_Architecture.png))
