@@ -122,10 +122,10 @@ explainable-llm-pipeline/
 │   ├── requirements.txt
 │
 ├── frontend/
-│   ├── src/
-│   ├── public/
-│   ├── package.json
-│   └── vite.config.js
+│   ├── src/                     # React Code
+│   ├── public/                  # Static Files
+│   ├── package.json             # Dependencies + Scripts
+│   └── vite.config.js           # Build + Dev Server Config
 │
 ├── README.md
 ```
