@@ -14,8 +14,7 @@ uvicorn app.main:app --reload
 
 
 ## Endpoint
-http://localhost:8000/ask?q=What
- is the capital of France?
+http://localhost:8000/ask?q=What is the capital of France?
 
 ## Goal
 Make LLM outputs:
