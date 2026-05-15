@@ -21,6 +21,8 @@ The system follows a layered architecture:
 - Data Layer (artifacts + traces)
 - External Systems (LLMs, embeddings, documents)
 
+<img width="1083" height="1210" alt="explainable-llm-pipeline_Architecture" src="https://github.com/user-attachments/assets/9b49480c-459e-499b-a82d-012d70bcbada" />
+
 ---
 
 ## Core Capabilities
