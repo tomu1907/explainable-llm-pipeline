@@ -121,6 +121,10 @@ explainable-llm-pipeline/
 │   |   └── data.py              # Example knowledge base
 │   ├── requirements.txt
 │
+├── docs/
+│   ├── adr/                     # Architecture Decision Records
+│   ├── diagrams/                # Diagrams and Flow-Charts
+|
 ├── frontend/
 │   ├── src/                     # React Code
 │   ├── public/                  # Static Files
