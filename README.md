@@ -162,7 +162,7 @@ npm run dev
 
 ### API Call in Frontend
 ```bash
-fetch("http://localhost:8000/ask?q=...")
+fetch("/ask?q=...")
 ```
 
 ---
