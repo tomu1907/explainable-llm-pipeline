@@ -127,6 +127,7 @@ explainable-llm-pipeline/
 |
 ├── frontend/
 │   ├── src/                     # React Code
+|   ├── index.html               # Main frontend page
 │   ├── public/                  # Static Files
 │   ├── package.json             # Dependencies + Scripts
 │   └── vite.config.js           # Build + Dev Server Config
@@ -167,6 +168,7 @@ uvicorn app.main:app --reload
 cd ..
 cd frontend
 npm install
+
 npm run dev
 ```
 
