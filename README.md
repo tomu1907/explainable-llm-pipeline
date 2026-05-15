@@ -141,7 +141,7 @@ explainable-llm-pipeline/
 ### 1. Clone repository
 ```bash
 git clone https://github.com/tomu1907/explainable-llm-pipeline
-cd explainable-llm-pipeline
+cd explainable-llm-pipeline\backend
 ```
 
 ### 2. Install dependencies
