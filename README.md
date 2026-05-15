@@ -138,14 +138,17 @@ explainable-llm-pipeline/
 
 ## Installation
 
+### Requirements
+- Download and Install Node.js (https://nodejs.org/en/download)
+
 ### 1. Clone repository
 ```bash
 git clone https://github.com/tomu1907/explainable-llm-pipeline
-cd explainable-llm-pipeline\backend
 ```
 
 ### 2. Install dependencies
 ```bash
+cd explainable-llm-pipeline\backend
 pip install -r requirements.txt
 ```
 
@@ -161,12 +164,16 @@ uvicorn app.main:app --reload
 
 ### 4. Run server (frontend)
 ```bash
+cd ..
+cd frontend
 npm install
 npm run dev
 ```
 
 ### 5. Open Frontend and start some queries
 ```bash
+(Test backend: http://127.0.0.1:8000/ask?q=test)
+
 http://localhost:5173/
 ```
 
