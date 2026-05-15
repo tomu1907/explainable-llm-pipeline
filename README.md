@@ -110,17 +110,24 @@ Query the system.
 ```
 explainable-llm-pipeline/
 │
-├── app/
-│   ├── main.py              # FastAPI entrypoint
-│   ├── pipeline.py          # LLM + prompt logic
-│   ├── retrieval.py         # FAISS retrieval
-│   ├── attribution.py       # Explainability mapping
-│   ├── scoring.py           # Confidence + failure detection
-│   ├── embeddings.py        # Embedding model interface
-│   └── data.py              # Example knowledge base
+├── backend/
+│   ├── app/
+│   |   ├── main.py              # FastAPI entrypoint
+│   |   ├── pipeline.py          # LLM + prompt logic
+│   |   ├── retrieval.py         # FAISS retrieval
+│   |   ├── attribution.py       # Explainability mapping
+│   |   ├── scoring.py           # Confidence + failure detection
+│   |   ├── embeddings.py        # Embedding model interface
+│   |   └── data.py              # Example knowledge base
+│   ├── requirements.txt
 │
-├── requirements.txt
-└── README.md
+├── frontend/
+│   ├── src/
+│   ├── public/
+│   ├── package.json
+│   └── vite.config.js
+│
+├── README.md
 ```
 
 ---
