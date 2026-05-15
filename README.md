@@ -24,4 +24,4 @@ Make LLM outputs:
 - measurable
 
 ## Architecture Overview
-![Screenshot](doc/Architecture.png)
+<img width="1083" height="1210" alt="Architecture" src="https://github.com/user-attachments/assets/0475af92-0546-4f0e-b625-f8d7bc703173" />
