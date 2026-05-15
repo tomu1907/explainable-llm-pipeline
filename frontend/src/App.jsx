@@ -2,7 +2,7 @@ import { useState } from "react";
 import { askLLM } from "./api";
 
 import QueryBox from "./components/QueryBox";
-import AnswerPanel from "./components/AnswerPanel";
+import AnswerWithAttribution from "./components/AnswerWithAttribution";
 import AttributionPanel from "./components/AttributionPanel";
 import ConfidenceBar from "./components/ConfidenceBar";
 import Warnings from "./components/Warnings";
@@ -30,7 +30,10 @@ export default function App() {
         <>
           <ConfidenceBar value={data.confidence} />
           <Warnings warnings={data.warnings} />
-          <AnswerPanel answer={data.answer} />
+          <AnswerWithAttribution
+            answer={data.answer}
+            attribution={data.attribution}
+          />
           <AttributionPanel attribution={data.attribution} sources={data.sources} />
         </>
       )}

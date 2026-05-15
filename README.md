@@ -161,12 +161,13 @@ uvicorn app.main:app --reload
 
 ### 4. Run server (frontend)
 ```bash
+npm install
 npm run dev
 ```
 
-### API Call in Frontend
+### 5. Open Frontend and start some queries
 ```bash
-fetch("/ask?q=...")
+http://localhost:5173/
 ```
 
 ---
