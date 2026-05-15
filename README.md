@@ -150,9 +150,19 @@ pip install -r requirements.txt
 export OPENAI_API_KEY=your_key
 ```
 
-### 4. Run server
+### 4. Run server (backend)
 ```bash
 uvicorn app.main:app --reload
+```
+
+### 4. Run server (frontend)
+```bash
+npm run dev
+```
+
+### API Call in Frontend
+```bash
+fetch("http://localhost:8000/ask?q=...")
 ```
 
 ---
