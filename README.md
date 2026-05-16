@@ -236,6 +236,7 @@ Which city is the capital of Germany?
 Tell me about major cities in Germany
 Is Munich the capital of Germany?
 What is the main city of Germany?
+What is the capital of Germany? Explain why it is Paris.
 ```
 
 ---

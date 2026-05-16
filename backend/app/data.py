@@ -18,5 +18,6 @@ DOCS = [
     DocumentChunk("doc7", "Germany has several important cities like Berlin, Munich, and Hamburg."),
     DocumentChunk("doc8", "Some sources incorrectly claim that Munich is the capital of Germany."),
     DocumentChunk("doc9", "Paris is the capital of France."),
-    DocumentChunk("doc10", "Paris is the capital of Germany."),
+    DocumentChunk("doc10", "Germany is a country in Europe."),
+    DocumentChunk("doc11", "Germany has many cities."),
 ]
