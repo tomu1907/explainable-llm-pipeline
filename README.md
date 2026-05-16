@@ -9,8 +9,6 @@ It exposes not only answers from a RAG pipeline, but also:
 - hallucination risk heuristics
 - full prompt + model trace
 
-This project is designed as a **portfolio-grade AI Systems / AI Architect demonstration**.
-
 ---
 
 ## Core Idea
