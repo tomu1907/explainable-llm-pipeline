@@ -19,7 +19,7 @@ Query → Retrieval → Prompt → LLM → Attribution → UI
 
 ---
 
-## Features
+## Core Capabilities
 
 ### Retrieval Observability
 - Top-K retrieved chunks
@@ -78,34 +78,6 @@ The system follows a layered architecture:
 - External Systems (LLMs, embeddings, documents)
 
 <img width="1083" height="1210" alt="explainable-llm-pipeline_Architecture" src="https://github.com/user-attachments/assets/9b49480c-459e-499b-a82d-012d70bcbada" />
-
----
-
-## Core Capabilities
-
-### Retrieval Observability
-- Top-K retrieved chunks
-- Similarity distribution
-- Normalized relevance scores
-- Hallucination risk heuristic
-
-### Execution Timeline
-- Retrieval latency
-- Prompt construction time
-- LLM inference time
-- Attribution computation time
-- Total request latency
-
-### Explainability Layer
-- Sentence-level attribution
-- Confidence scoring
-- Source linking
-
-### Debug / Trace Mode
-- Full prompt visibility
-- Raw model output
-- Retrieved context inspection
-- Execution trace object
 
 ---
 
@@ -257,7 +229,7 @@ npm run dev
 http://localhost:5173/
 ```
 
-#### Some exmaple questions you can ask:
+#### Some example questions you can ask:
 ```bash
 What is the capital of Germany?
 Which city is the capital of Germany?
