@@ -8,93 +8,75 @@ from app.pipeline import build_prompt, generate_answer
 from app.attribution import attribute_answer
 from app.scoring import compute_confidence, detect_failures
 
-app = FastAPI(title="Explainable LLM Pipeline")
+app = FastAPI()
 
-
-# ----------------------------
-# CORS (Frontend integration)
-# ----------------------------
+# --- CORS (für React Frontend) ---
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # Vite dev server
+    allow_origins=["http://localhost:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# --- Init Retriever ---
+retriever = Retriever(DOCS, embed)
 
-# ----------------------------
-# Helper: JSON-safe conversion
-# ----------------------------
+
 def to_py(x):
-    """
-    Ensures compatibility between numpy / faiss types and JSON serialization.
-    """
+    """Convert numpy types to native Python types."""
     try:
         return x.item()
     except Exception:
         return x
 
 
-# ----------------------------
-# Initialize Retriever (once)
-# ----------------------------
-retriever = Retriever(DOCS, embed)
-
-
-# ----------------------------
-# Main Endpoint
-# ----------------------------
 @app.get("/ask")
 def ask(q: str):
-    """
-    End-to-end Explainable LLM pipeline:
-    Retrieval → Generation → Attribution → Scoring
-    """
-
-    # 1. Retrieval
+    # --- Retrieval ---
     chunks, distances = retriever.search(q)
+
+    # Convert numpy distances
     distances = [float(to_py(d)) for d in distances]
 
-    # 2. Prompt construction
+    # --- Prompt ---
     prompt = build_prompt(q, chunks)
 
-    # 3. LLM generation
+    # --- LLM ---
     answer = generate_answer(prompt)
 
-    # 4. Attribution (sentence → source mapping)
+    # --- Attribution ---
     attributions = attribute_answer(answer, chunks, embed)
 
-    # sanitize attribution scores
+    # ensure python floats
     for a in attributions:
         a["score"] = float(to_py(a["score"]))
 
-    # 5. Confidence scoring
-    confidence = compute_confidence(attributions, distances)
-    confidence = float(to_py(confidence))
+        # OPTIONAL: enrich with source text (recommended)
+        match = next((c for c in chunks if c.id == a["source"]), None)
+        if match:
+            a["source_text"] = match.text
 
-    # 6. Failure detection
+    # --- Confidence ---
+    confidence = float(to_py(compute_confidence(attributions, distances)))
+
+    # --- Failure detection ---
     warnings = detect_failures(attributions, confidence)
 
-    # 7. Response (API boundary = JSON-safe only)
+    # --- Response ---
     return {
         "query": q,
         "answer": answer,
+
         "sources": [
-            {
-                "id": c.id,
-                "text": c.text
-            }
+            {"id": c.id, "text": c.text}
             for c in chunks
         ],
-        "attribution": [
-            {
-                "sentence": a["sentence"],
-                "source": a["source"],
-                "score": a["score"]
-            }
-            for a in attributions
-        ],
+
+        "attribution": attributions,
         "confidence": confidence,
-        "warnings": warnings
+        "warnings": warnings,
+
+        "prompt": prompt,
+        "context": [c.text for c in chunks]
     }

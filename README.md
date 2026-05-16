@@ -179,6 +179,15 @@ npm run dev
 http://localhost:5173/
 ```
 
+#### Some exmaple questions you can ask:
+```bash
+What is the capital of Germany?
+Which city is the capital of Germany?
+Tell me about major cities in Germany
+Is Munich the capital of Germany?
+What is the main city of Germany?
+```
+
 ---
 
 ## Key Design Principles

@@ -14,7 +14,7 @@ class Retriever:
         self.index = faiss.IndexFlatL2(len(embeddings[0]))
         self.index.add(np.array(embeddings).astype("float32"))
 
-    def search(self, query: str, k=3):
+    def search(self, query: str, k=5):
         q_emb = self.embed_fn(query)
 
         D, I = self.index.search(

@@ -1,4 +1,8 @@
-export default function AnswerWithAttribution({ answer, attribution }) {
+export default function AnswerWithAttribution({
+  answer,
+  attribution,
+  onSelect
+}) {
   if (!answer || !attribution) return null;
 
   const sentences = answer
@@ -12,32 +16,36 @@ export default function AnswerWithAttribution({ answer, attribution }) {
     );
   }
 
-  function getColor(score) {
-    if (score > 0.75) return "#c8f7c5";   // green
-    if (score > 0.5) return "#fff3cd";    // yellow
-    return "#f8d7da";                     // red
+  function color(score) {
+    if (score > 0.75) return "#c8f7c5";
+    if (score > 0.5) return "#fff3cd";
+    return "#f8d7da";
   }
 
   return (
-    <div style={{ marginTop: 20 }}>
-      <h3>Answer (Explainable)</h3>
+    <div>
+      <h3>Answer</h3>
 
-      <div style={{ lineHeight: "1.6" }}>
+      <div style={{ lineHeight: "1.7" }}>
         {sentences.map((s, i) => {
           const attr = getAttr(s);
 
-          if (!attr) return <span key={i}>{s}. </span>;
+          if (!attr) {
+            return <span key={i}>{s}. </span>;
+          }
 
           return (
             <span
               key={i}
-              title={`Source: ${attr.source} | Score: ${attr.score.toFixed(2)}`}
+              onClick={() => onSelect(attr)}
               style={{
-                background: getColor(attr.score),
+                background: color(attr.score),
+                cursor: "pointer",
                 padding: "2px 4px",
-                marginRight: 4,
-                borderRadius: 4
+                borderRadius: 4,
+                marginRight: 4
               }}
+              title="Click for source"
             >
               {s}.
             </span>
