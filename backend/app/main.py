@@ -29,6 +29,16 @@ def to_py(x):
         return x
 
 
+def normalize(scores):
+    if not scores:
+        return []
+    mx = max(scores)
+    mn = min(scores)
+    if mx == mn:
+        return [0.0 for _ in scores]
+    return [(s - mn) / (mx - mn) for s in scores]
+
+
 @app.get("/ask")
 def ask(q: str):
     t0 = time.time()
@@ -40,12 +50,16 @@ def ask(q: str):
 
     distances = [float(to_py(d)) for d in distances]
 
-    # 2. Prompt build
+    # convert distance → similarity
+    similarities = [1 / (1 + d) for d in distances]
+    norm_sim = normalize(similarities)
+
+    # 2. Prompt
     t_prompt = time.time()
     prompt = build_prompt(q, chunks)
     prompt_time = time.time() - t_prompt
 
-    # 3. LLM call
+    # 3. LLM
     t_llm = time.time()
     model_output = generate_answer(prompt)
     llm_time = time.time() - t_llm
@@ -58,15 +72,19 @@ def ask(q: str):
     for a in attributions:
         a["score"] = float(to_py(a["score"]))
 
-        match = next((c for c in chunks if c.id == a["source"]), None)
-        if match:
-            a["source_text"] = match.text
-
-    # 5. Metrics
+    # 5. Confidence + failure signals
     confidence = float(to_py(compute_confidence(attributions, distances)))
     warnings = detect_failures(attributions, confidence)
 
-    # 6. TRACE (Execution Profiler)
+    # 6. HALLUCINATION RISK (heuristic)
+    top_sim = max(norm_sim) if norm_sim else 0.0
+    avg_sim = sum(norm_sim) / len(norm_sim) if norm_sim else 0.0
+
+    hallucination_risk = float(
+        1.0 - (0.6 * top_sim + 0.4 * avg_sim)
+    )
+
+    # 7. TRACE
     trace = {
         "query": q,
 
@@ -80,13 +98,20 @@ def ask(q: str):
 
         "retrieval_chunks": [c.text for c in chunks],
         "prompt": prompt,
-        "model_output": model_output
+        "model_output": model_output,
+
+        # NEW
+        "similarities": similarities,
+        "normalized_similarities": norm_sim,
+        "top_k": [
+            {"text": c.text, "score": norm_sim[i]}
+            for i, c in enumerate(chunks)
+        ],
+        "hallucination_risk": hallucination_risk
     }
 
-    # 7. RESPONSE
     return {
         "query": q,
-
         "answer": model_output,
         "raw_response": model_output,
 

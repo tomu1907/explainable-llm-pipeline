@@ -1,16 +1,74 @@
-# Explainable LLM Pipeline
+# Explainable LLM Pipeline (RAG Observability System)
 
-A minimal but extensible system for building **transparent, explainable, and debuggable LLM applications** using Retrieval-Augmented Generation (RAG), attribution, and confidence scoring.
+A lightweight, production-inspired **LLM explainability and observability system** built with FastAPI + React.
 
-The goal of this project is to make LLM outputs:
-- traceable
-- grounded in sources
-- measurable in confidence
-- debuggable in production-like settings
+It exposes not only answers from a RAG pipeline, but also:
+- retrieval behavior
+- execution timing
+- attribution signals
+- hallucination risk heuristics
+- full prompt + model trace
+
+This project is designed as a **portfolio-grade AI Systems / AI Architect demonstration**.
 
 ---
 
-## Architecture Overview
+## Core Idea
+
+Instead of treating LLMs as black boxes, this system decomposes inference into observable steps:
+
+Query → Retrieval → Prompt → LLM → Attribution → UI
+
+---
+
+## Features
+
+### Retrieval Observability
+- Top-K retrieved chunks
+- Similarity distribution
+- Normalized relevance scores
+- Hallucination risk heuristic
+
+### Execution Timeline
+- Retrieval latency
+- Prompt construction time
+- LLM inference time
+- Attribution computation time
+- Total request latency
+
+### Explainability Layer
+- Sentence-level attribution
+- Confidence scoring
+- Source linking
+
+### Debug / Trace Mode
+- Full prompt visibility
+- Raw model output
+- Retrieved context inspection
+- Execution trace object
+
+---
+
+## Architecture
+
+### Backend (FastAPI)
+
+- `/ask?q=...` endpoint
+- RAG retrieval layer (vector search)
+- Prompt builder
+- LLM generator (mock or real model)
+- Attribution scoring module
+- Confidence + failure detection
+
+### Frontend (React + Vite)
+
+- Explainability dashboard
+- Execution timeline visualization
+- Retrieval analysis panel
+- Attribution explorer
+- Debug trace viewer
+
+### Architecure Overview
 
 The system follows a layered architecture:
 
@@ -27,26 +85,48 @@ The system follows a layered architecture:
 
 ## Core Capabilities
 
-### 1. Retrieval-Augmented Generation (RAG)
-- Embedding-based document retrieval
-- FAISS vector search
-- Context injection into prompts
+### Retrieval Observability
+- Top-K retrieved chunks
+- Similarity distribution
+- Normalized relevance scores
+- Hallucination risk heuristic
 
-### 2. Explainability Layer
+### Execution Timeline
+- Retrieval latency
+- Prompt construction time
+- LLM inference time
+- Attribution computation time
+- Total request latency
+
+### Explainability Layer
 - Sentence-level attribution
-- Source grounding of each answer segment
-- Traceability from output → source documents
+- Confidence scoring
+- Source linking
 
-### 3. Confidence Scoring
-- Heuristic-based reliability scoring
-- Retrieval strength signals
-- Attribution consistency scoring
+### Debug / Trace Mode
+- Full prompt visibility
+- Raw model output
+- Retrieved context inspection
+- Execution trace object
 
-### 4. Failure Detection
-- Hallucination heuristics
-- Low-confidence detection
-- Missing grounding detection
+---
 
+## Execution Trace Example
+
+```
+json
+{
+  "timings": {
+    "retrieval_ms": 12.4,
+    "prompt_ms": 3.1,
+    "llm_ms": 220.5,
+    "attribution_ms": 18.2,
+    "total_ms": 254.2
+  },
+  "similarities": [0.91, 0.72, 0.44],
+  "hallucination_risk": 0.23
+}
+```
 ---
 
 ## System Architecture
@@ -54,15 +134,15 @@ The system follows a layered architecture:
 ```
 User Query
    ↓
-Retriever (FAISS)
+Retrieval (vector search)
    ↓
-Context Builder
+Prompt construction
    ↓
-LLM Generation
+LLM generation
    ↓
-Attribution Layer
+Attribution scoring
    ↓
-Confidence Scoring
+Explainability + risk analysis
    ↓
 Response + Debug Metadata
 ```
