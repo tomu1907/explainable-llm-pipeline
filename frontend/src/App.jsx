@@ -4,6 +4,7 @@ import AnswerWithAttribution from "./components/AnswerWithAttribution";
 import SourcePanel from "./components/SourcePanel";
 import PromptViewer from "./components/PromptViewer";
 import RawResponseViewer from "./components/RawResponseViewer";
+import ExecutionTimeline from "./components/ExecutionTimeline";
 
 export default function App() {
   const [query, setQuery] = useState("What is the capital of Germany?");
@@ -36,7 +37,7 @@ export default function App() {
   return (
     <div style={{ display: "flex", height: "100vh", fontFamily: "Arial" }}>
 
-      {/* LEFT SIDE */}
+      {/* LEFT */}
       <div style={{ flex: 2, padding: 20, overflowY: "auto" }}>
         <h2>Explainable LLM Debug Dashboard</h2>
 
@@ -64,7 +65,7 @@ export default function App() {
 
         {loading && <p>Loading...</p>}
 
-        {/* MAIN VIEW */}
+        {/* MAIN OUTPUT */}
         {data && (
           <>
             <AnswerWithAttribution
@@ -78,6 +79,10 @@ export default function App() {
               context={data.trace.retrieval_chunks}
             />
 
+            {/* EXECUTION TIMELINE */}
+            <ExecutionTimeline trace={data.trace} />
+
+            {/* RAW DEBUG */}
             {debug && (
               <RawResponseViewer raw={data.trace} />
             )}
@@ -85,7 +90,7 @@ export default function App() {
         )}
       </div>
 
-      {/* RIGHT SIDE */}
+      {/* RIGHT */}
       <div
         style={{
           flex: 1,
