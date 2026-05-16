@@ -1,6 +1,7 @@
 import faiss
 import numpy as np
 
+
 class Retriever:
     def __init__(self, docs, embed_fn):
         self.docs = docs
@@ -17,8 +18,6 @@ class Retriever:
     def search(self, query: str, k=5):
         q_emb = self.embed_fn(query)
 
-        D, I = self.index.search(
-            np.array([q_emb]).astype("float32"), k
-        )
+        D, I = self.index.search(np.array([q_emb]).astype("float32"), k)
 
         return [self.docs[i] for i in I[0]], D[0]

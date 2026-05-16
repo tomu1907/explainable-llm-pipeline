@@ -5,11 +5,7 @@ def compute_confidence(attributions, distances):
     coverage = sum(1 for s in attr_scores if s > 0.7) / len(attr_scores)
     retrieval_strength = 1 / (1 + sum(distances) / len(distances))
 
-    confidence = (
-        0.5 * avg_attr +
-        0.3 * coverage +
-        0.2 * retrieval_strength
-    )
+    confidence = 0.5 * avg_attr + 0.3 * coverage + 0.2 * retrieval_strength
 
     return round(confidence, 3)
 

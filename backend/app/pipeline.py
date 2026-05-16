@@ -2,6 +2,7 @@ from openai import OpenAI
 
 client = OpenAI()
 
+
 def build_prompt(query, chunks):
     context = "\n".join([c.text for c in chunks])
 
@@ -14,6 +15,7 @@ Context:
 Question:
 {query}
 """
+
 
 def generate_answer(prompt):
     res = client.chat.completions.create(

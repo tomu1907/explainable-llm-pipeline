@@ -80,14 +80,11 @@ def ask(q: str):
     top_sim = max(norm_sim) if norm_sim else 0.0
     avg_sim = sum(norm_sim) / len(norm_sim) if norm_sim else 0.0
 
-    hallucination_risk = float(
-        1.0 - (0.6 * top_sim + 0.4 * avg_sim)
-    )
+    hallucination_risk = float(1.0 - (0.6 * top_sim + 0.4 * avg_sim))
 
     # 7. TRACE
     trace = {
         "query": q,
-
         "timings": {
             "retrieval_ms": round(retrieval_time * 1000, 2),
             "prompt_ms": round(prompt_time * 1000, 2),
@@ -95,36 +92,24 @@ def ask(q: str):
             "attribution_ms": round(attr_time * 1000, 2),
             "total_ms": round((time.time() - t0) * 1000, 2),
         },
-
         "retrieval_chunks": [c.text for c in chunks],
         "prompt": prompt,
         "model_output": model_output,
-
         # NEW
         "similarities": similarities,
         "normalized_similarities": norm_sim,
-        "top_k": [
-            {"text": c.text, "score": norm_sim[i]}
-            for i, c in enumerate(chunks)
-        ],
-        "hallucination_risk": hallucination_risk
+        "top_k": [{"text": c.text, "score": norm_sim[i]} for i, c in enumerate(chunks)],
+        "hallucination_risk": hallucination_risk,
     }
 
     return {
         "query": q,
         "answer": model_output,
         "raw_response": model_output,
-
         "trace": trace,
-
-        "sources": [
-            {"id": c.id, "text": c.text}
-            for c in chunks
-        ],
-
+        "sources": [{"id": c.id, "text": c.text} for c in chunks],
         "attribution": attributions,
         "confidence": confidence,
         "warnings": warnings,
-
-        "context": [c.text for c in chunks]
+        "context": [c.text for c in chunks],
     }
