@@ -10,7 +10,7 @@ from app.scoring import compute_confidence, detect_failures
 
 app = FastAPI()
 
-# --- CORS (für React Frontend) ---
+# CORS für Frontend (Vite)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"],
@@ -19,12 +19,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# --- Init Retriever ---
 retriever = Retriever(DOCS, embed)
 
 
 def to_py(x):
-    """Convert numpy types to native Python types."""
+    """Convert numpy types to native Python types"""
     try:
         return x.item()
     except Exception:
@@ -33,50 +32,61 @@ def to_py(x):
 
 @app.get("/ask")
 def ask(q: str):
-    # --- Retrieval ---
+    # 1. Retrieval
     chunks, distances = retriever.search(q)
-
-    # Convert numpy distances
     distances = [float(to_py(d)) for d in distances]
 
-    # --- Prompt ---
+    # 2. Prompt construction
     prompt = build_prompt(q, chunks)
 
-    # --- LLM ---
-    answer = generate_answer(prompt)
+    # 3. LLM call
+    model_output = generate_answer(prompt)
 
-    # --- Attribution ---
-    attributions = attribute_answer(answer, chunks, embed)
+    # 4. Attribution
+    attributions = attribute_answer(model_output, chunks, embed)
 
-    # ensure python floats
     for a in attributions:
         a["score"] = float(to_py(a["score"]))
 
-        # OPTIONAL: enrich with source text (recommended)
+        # optional enrichment: source text attach
         match = next((c for c in chunks if c.id == a["source"]), None)
         if match:
             a["source_text"] = match.text
 
-    # --- Confidence ---
+    # 5. Confidence + warnings
     confidence = float(to_py(compute_confidence(attributions, distances)))
-
-    # --- Failure detection ---
     warnings = detect_failures(attributions, confidence)
 
-    # --- Response ---
+    # 6. TRACE (Debug / Explainability backbone)
+    trace = {
+        "query": q,
+        "retrieval_chunks": [c.text for c in chunks],
+        "prompt": prompt,
+        "model_output": model_output
+    }
+
+    # 7. Response (JSON-safe, frontend-ready)
     return {
         "query": q,
-        "answer": answer,
 
+        # main output
+        "answer": model_output,
+        "raw_response": model_output,
+
+        # full debug trace
+        "trace": trace,
+
+        # retrieval layer
         "sources": [
             {"id": c.id, "text": c.text}
             for c in chunks
         ],
 
+        # explainability layer
         "attribution": attributions,
         "confidence": confidence,
         "warnings": warnings,
 
-        "prompt": prompt,
+        # UI helper
         "context": [c.text for c in chunks]
     }

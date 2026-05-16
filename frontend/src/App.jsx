@@ -3,12 +3,15 @@ import { useState } from "react";
 import AnswerWithAttribution from "./components/AnswerWithAttribution";
 import SourcePanel from "./components/SourcePanel";
 import PromptViewer from "./components/PromptViewer";
+import RawResponseViewer from "./components/RawResponseViewer";
 
 export default function App() {
   const [query, setQuery] = useState("What is the capital of Germany?");
   const [data, setData] = useState(null);
   const [selected, setSelected] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  const [debug, setDebug] = useState(true);
 
   async function ask() {
     if (!query) return;
@@ -23,8 +26,8 @@ export default function App() {
 
       const json = await res.json();
       setData(json);
-    } catch (err) {
-      console.error("API error:", err);
+    } catch (e) {
+      console.error(e);
     }
 
     setLoading(false);
@@ -32,43 +35,36 @@ export default function App() {
 
   return (
     <div style={{ display: "flex", height: "100vh", fontFamily: "Arial" }}>
-      
+
       {/* LEFT SIDE */}
       <div style={{ flex: 2, padding: 20, overflowY: "auto" }}>
-        
-        <h2>Explainable LLM Dashboard</h2>
+        <h2>Explainable LLM Debug Dashboard</h2>
 
         {/* INPUT */}
         <div style={{ marginBottom: 20 }}>
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && ask()}
             placeholder="Ask something..."
-            style={{
-              width: "70%",
-              padding: 10,
-              fontSize: 14
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") ask();
-            }}
+            style={{ width: "70%", padding: 10 }}
           />
 
-          <button
-            onClick={ask}
-            style={{
-              padding: 10,
-              marginLeft: 10,
-              cursor: "pointer"
-            }}
-          >
+          <button onClick={ask} style={{ padding: 10, marginLeft: 10 }}>
             Run
+          </button>
+
+          <button
+            onClick={() => setDebug(!debug)}
+            style={{ padding: 10, marginLeft: 10 }}
+          >
+            Debug: {debug ? "ON" : "OFF"}
           </button>
         </div>
 
         {loading && <p>Loading...</p>}
 
-        {/* ANSWER + DEBUG */}
+        {/* MAIN VIEW */}
         {data && (
           <>
             <AnswerWithAttribution
@@ -78,15 +74,18 @@ export default function App() {
             />
 
             <PromptViewer
-              prompt={data.prompt}
-              context={data.context}
+              prompt={data.trace.prompt}
+              context={data.trace.retrieval_chunks}
             />
+
+            {debug && (
+              <RawResponseViewer raw={data.trace} />
+            )}
           </>
         )}
-
       </div>
 
-      {/* RIGHT SIDE (SOURCE PANEL) */}
+      {/* RIGHT SIDE */}
       <div
         style={{
           flex: 1,
